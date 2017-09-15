@@ -1,0 +1,29 @@
+.App{
+    padding-top:20px;
+    align-items: center;
+    text-align: center;
+}
+
+.title{
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+input{
+    margin:5px;
+}
+.reminderForm{
+    padding:5px;
+}
+.reminderList{
+    margin-left: 35%;
+}
+.list-item{
+    display: inline-block;
+}
+.delete-item{
+    float: right;
+    padding-left:5px;
+    cursor: pointer;
+}

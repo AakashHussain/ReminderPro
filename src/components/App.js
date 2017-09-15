@@ -1,0 +1,118 @@
+import React, {Component} from 'react'
+import { connect } from 'react-redux'
+import {addReminder,deleteReminder,clearReminders} from "../actions/index.js"
+import moment from 'moment'
+import Keypress from 'react-keypress'
+import reminders from "../reducers/index";
+
+class App extends Component{
+
+    constructor(props){
+        super(props);
+        this.state={
+            text:'',
+            dueDate:''
+        }
+    }
+
+    addReminder(){
+        console.log('this.state.dueDate',this.state.dueDate)
+        this.props.addReminder(this.state.text,this.state.dueDate);
+    }
+    deleteReminder(id){
+        this.props.deleteReminder(id)
+    }
+    renderReminders(){
+        const { reminders } = this.props;
+        return(
+            <ul className="list-group col-sm-4 reminderList">
+                {
+                    reminders.map(reminder=>{
+                        return(
+                            <li key={reminder.id} className="list-group-item ">
+                                <div className="list-item">
+                                   <div>{reminder.text}</div>
+                                    <div><em>{moment(new Date(reminder.dueDate)).fromNow()}</em></div>
+
+                                    </div>
+                                <div
+                                    className="delete-item"
+                                    onClick={()=>this.deleteReminder(reminder.id)}
+                                >
+                                    &#x2715;
+                                </div>
+                            </li>
+
+                            )
+                    })
+                }
+            </ul>
+        )
+    }
+
+    render(){
+        return(
+            <div className="row">
+                <div className="App">
+                    <div className="col-md-6 leftCol">
+                        <div className="title">
+                            Reminder Pro
+                        </div>
+                        <div className="form-inline reminderForm">
+                            <div className="form-group">
+                                <input
+                                    className="form-control"
+                                    placeholder="I have to..."
+                                    onChange={event=>this.setState({text:event.target.value})}
+                                />
+                                <input
+                                    className="form-control"
+                                    type="datetime-local"
+                                    onChange={(event)=>this.setState({dueDate:event.target.value})}
+                                    onKeyPress={Keypress('enter',()=>this.addReminder())}
+                                />
+                            </div>
+                            <button
+                                className="btn btn-success"
+                                onClick={()=>this.addReminder()}
+                            >
+                                Add Reminder
+                            </button>
+                        </div>
+                        {this.renderReminders()}
+                        <div
+                            className="btn btn-danger"
+                            onClick={this.props.clearReminders}
+                        >
+                            Clear Reminders
+                        </div>
+                    </div>
+                        <div className="col-md-6">
+                            <div className="title">
+                                Great Course
+                            </div>
+                            <div className="form-inline">
+                                <div className="form-group">
+                                    <input
+                                        className="form-control"
+                                        placeholder="Name here"
+                                    />
+                                </div>
+                                <button className="btn btn-success">
+                                    Add Course
+                                </button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+        )
+    }
+}
+function mapStateToProps(state){
+    return{
+        reminders:state
+    }
+}
+
+export default connect(mapStateToProps,{ addReminder, deleteReminder,clearReminders})(App);
